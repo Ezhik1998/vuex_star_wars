@@ -14,6 +14,7 @@ const state = {
   films: [],
   characters: [],
   starships: [],
+  planets: [],
 };
 const getters = {
   // // геттер как свойство
@@ -21,19 +22,20 @@ const getters = {
   // // геттер как функция
   // getMarks: state => mark => state.marks.filter(m => m >= mark),
 
-  getFilmByID: state => id => 
-    state.films.find(film => film.id === id),
+  getFilmByID: state => id => state.films.find(film => film.id === id),
 
-  getAllCharactersIDs: state =>
-    state.characters.map(ch => ch.id),
+  getAllCharactersIDs: state => state.characters.map(ch => ch.id),
 
-  getAllShipsIDs: state => state.starships.map(ship => ship.id)
+  getAllShipsIDs: state => state.starships.map(ship => ship.id),
+
+  getAllPlanetsIDs: state => state.planets.map(planet => planet.id),
 
 };
 const mutations = {
   setFilms: (state, payload) => (state.films = payload),
   setCharacters: (state, payload) => (state.characters = [...state.characters, ...payload]),
-  setShips: (state, payload) => (state.starships = [...state.starships, ...payload])
+  setShips: (state, payload) => (state.starships = [...state.starships, ...payload]),
+  setPlanets: (state, payload) => (state.planets = [...state.planets, ...payload]),
   
 };
 const actions = {
@@ -49,9 +51,9 @@ const actions = {
 
   async getCharacters ({state, commit}, charactersID) {   
     let chDetails = [];
-    console.log(charactersID);
+    // console.log(charactersID);
     for (let ch of charactersID) {
-      console.log(ch);
+      // console.log(ch);
       const {data} = await axios.get("https://swapi.co/api/people/" + ch + "/")
       chDetails.push(data) 
       chDetails.map(character => {
@@ -65,9 +67,9 @@ const actions = {
 
   async getShips ({state, commit}, shipsID) {   
     let shipDetails = [];
-    console.log(shipsID);
+    // console.log(shipsID);
     for (let ship of shipsID) {
-      console.log(ship);
+      // console.log(ship);
       const {data} = await axios.get("https://swapi.co/api/starships/" + ship + "/")
       shipDetails.push(data) 
       shipDetails.map(sh => {
@@ -79,7 +81,20 @@ const actions = {
     commit('setShips', shipDetails)    
   },
 
-
+  async getPlanets ({state, commit}, planetsID) {   
+    let planetDetails = [];    
+    for (let planet of planetsID) {
+      // console.log(planet);
+      const {data} = await axios.get("https://swapi.co/api/planets/" + planet + "/")
+      planetDetails.push(data) 
+      planetDetails.map(pl => {
+        let parse_url = pl.url.split('/');
+        pl.id = parse_url[parse_url.length - 2];
+      })         
+    }
+    console.log(planetDetails);
+    commit('setPlanets', planetDetails)    
+  },
 };
 
 export default new Vuex.Store({

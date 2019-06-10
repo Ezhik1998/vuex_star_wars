@@ -22,15 +22,15 @@
               <planets-list :planetsInfo="planetsInfo"></planets-list>          
             </div>
 
-            <div class = "col" v-if ='film.vehicles && film.vehicles.length > 0' >
+            <!-- <div class = "col" v-if ='film.vehicles && film.vehicles.length > 0' >
               <vehicles-list :vehiclesInfo="vehiclesInfo"></vehicles-list>         
-            </div>
+            </div> -->
           </div>
         </div>
         
-        <div class="row">
+        <!-- <div class="row">
 	  	      <species-list :speciesInfo="speciesDetails"></species-list>
-	      </div>
+	      </div> -->
         <p/>
         <router-link class = "back" to="/">Back</router-link>
   </div>
@@ -49,7 +49,7 @@ export default {
       // film: {},      
       // characterDetails: [], 
       speciesDetails: [], 
-      planetsInfo: [],
+      // planetsInfo: [],
       // shipsInfo: [],
       vehiclesInfo: [],
 
@@ -63,11 +63,12 @@ export default {
   },
 
   computed: {
-    ...mapState(['films', 'characters', 'starships']),
+    ...mapState(['films', 'characters', 'starships', 'planets']),
     ...mapGetters([
       'getFilmByID',
       'getAllCharactersIDs',
       'getAllShipsIDs',
+      'getAllPlanetsIDs',
     ]),
 
     film() {
@@ -83,6 +84,12 @@ export default {
     shipsInfo() {
       return this.starships.filter(
         ship => this.film.starships.includes(ship.url)
+      )
+    },
+
+    planetsInfo() {
+      return this.planets.filter(
+        planet => this.film.planets.includes(planet.url)
       )
     },
 
@@ -117,7 +124,23 @@ export default {
       return this.currentFilmShipsIDs.filter(
         id => !this.getAllShipsIDs.includes(id)
       )
-    }
+    },
+
+    currentFilmPlanetsIDs() {
+      return this.film.planets.map(
+        url => {
+          let parse_url = url.split('/');
+          let planet_id = parse_url[parse_url.length - 2]; 
+          return planet_id              
+        }
+      )
+    },
+
+    nonInPlanetsIDs() {
+      return this.currentFilmPlanetsIDs.filter(
+        id => !this.getAllPlanetsIDs.includes(id)
+      )
+    },
 
   },
   
@@ -125,6 +148,7 @@ export default {
     
     this.$store.dispatch('getCharacters', this.nonInCharactersIDs)
     this.$store.dispatch('getShips', this.nonInShipsIDs)
+    this.$store.dispatch('getPlanets', this.nonInPlanetsIDs)
     
     // this.film.planets.forEach((planetUrl) => {
     //       fetch(planetUrl).then((response) => {
