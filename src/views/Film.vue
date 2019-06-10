@@ -206,45 +206,6 @@ export default {
     if(this.nonInSpeciesIDs.length > 0) {
     this.$store.dispatch('getSpecies', this.nonInSpeciesIDs)
     }
-    
-    // this.film.planets.forEach((planetUrl) => {
-    //       fetch(planetUrl).then((response) => {
-    //         return response.json();
-    //       }).then((detail) => {
-    //         let parse_url = detail.url.split('/');
-    //         detail.id = parse_url[parse_url.length - 2]; 
-    //         this.planetsInfo.push(detail);                       
-    //       })
-    //     }); 
-
-    // this.film.vehicles.forEach((vehicleUrl) => {
-    //       fetch(vehicleUrl).then((response) => {
-    //         return response.json();
-    //       }).then((detail) => {
-    //         let parse_url = detail.url.split('/');
-    //         detail.id = parse_url[parse_url.length - 2]; 
-    //         this.vehiclesInfo.push(detail);                       
-    //       })
-    //     });
-
-    // this.film.starships.forEach((shipUrl) => {
-    //           fetch(shipUrl).then((response) => {
-    //             return response.json();
-    //           }).then((detail) => {
-    //             let parse_url = detail.url.split('/');
-    //             detail.id = parse_url[parse_url.length - 2]; 
-    //             this.shipsInfo.push(detail);                       
-    //           })
-    //         });
-    // this.film.species.forEach((speciesUrl) => {
-    //       fetch(speciesUrl).then((response) => {
-    //         return response.json();
-    //       }).then((detail) => {
-    //         let parse_url = detail.url.split('/');
-    //         detail.id = parse_url[parse_url.length - 2]; 
-    //         this.speciesDetails.push(detail);                       
-    //       })
-    //     }); 
 
   }  
 }

@@ -36,6 +36,8 @@ const getters = {
 
   getAllSpeciesIDs: state => state.species.map(sp => sp.id),
 
+  getSpeciesByID: state => id => state.species.find(sp => sp.id === id),
+
 };
 const mutations = {
   setFilms: (state, payload) => (state.films = payload),

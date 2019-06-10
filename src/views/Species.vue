@@ -17,15 +17,28 @@
 
 <script>
 import axios from 'axios';
-export default {
-    data: () => ({
-      species: [],       
-    }),
+import { mapState, mapGetters } from 'vuex';
 
-    async created() {
-    var {data} = await axios.get('https://swapi.co/api/species/'+this.$route.params.id);
-    this.species = data 
-    }    
+export default {
+    // data: () => ({
+    //   species: [],       
+    // }),
+
+    computed: {
+        ...mapState(['species']),
+        ...mapGetters([
+            'getSpeciesByID'
+        ]),
+
+        species() {
+            return this.getSpeciesByID(this.$route.params.id)
+        }
+    },
+
+    // async created() {
+    // var {data} = await axios.get('https://swapi.co/api/species/'+this.$route.params.id);
+    // this.species = data 
+    // }    
 }
 </script>
 
