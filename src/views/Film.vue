@@ -123,20 +123,6 @@ export default {
   
   async created() {
     
-    // var {data} = await axios.get('https://swapi.co/api/films/'+this.$route.params.id);
-    // this.film = data    
-      
-
-    // this.film.characters.forEach((characterUrl) => {
-    //       fetch(characterUrl).then((response) => {
-    //         return response.json();
-    //       }).then((detail) => {
-    //         let parse_url = detail.url.split('/');
-    //         detail.id = parse_url[parse_url.length - 2]; 
-    //         this.characterDetails.push(detail);                       
-    //       })
-    //     }); 
-
     this.$store.dispatch('getCharacters', this.nonInCharactersIDs)
     this.$store.dispatch('getShips', this.nonInShipsIDs)
     
