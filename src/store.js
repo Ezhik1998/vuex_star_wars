@@ -95,6 +95,7 @@ const actions = {
 
   async getPlanets ({state, commit}, planetsID) {   
     let planetDetails = [];    
+    console.log("Planets ID " + planetsID);
     for (let planet of planetsID) {
       // console.log(planet);
       const {data} = await axios.get("https://swapi.co/api/planets/" + planet + "/")

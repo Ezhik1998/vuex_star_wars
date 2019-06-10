@@ -119,7 +119,7 @@ export default {
     },
 
     nonInCharactersIDs() {
-      return this.currentFilmCharactersIDs.filter(
+        return this.currentFilmCharactersIDs.filter(
         id => !this.getAllCharactersIDs.includes(id)
       )
     },
@@ -151,6 +151,7 @@ export default {
     },
 
     nonInPlanetsIDs() {
+      // console.log("Curr pl " + this.currentFilmPlanetsIDs);
       return this.currentFilmPlanetsIDs.filter(
         id => !this.getAllPlanetsIDs.includes(id)
       )
@@ -181,7 +182,7 @@ export default {
       )
     },
 
-    nonInSpeciesIDs() {
+    nonInSpeciesIDs() {      
       return this.currentFilmSpeciesIDs.filter(
         id => !this.getAllSpeciesIDs.includes(id)
       )
@@ -197,7 +198,8 @@ export default {
     if(this.nonInShipsIDs.length > 0) {  
       this.$store.dispatch('getShips', this.nonInShipsIDs)
     }
-    if(this.nonInPlanetsIDs.length > 0) { 
+    if(this.nonInPlanetsIDs.length > 0) {
+      console.log('Non ' + this.nonInPlanetsIDs); 
       this.$store.dispatch('getPlanets', this.nonInPlanetsIDs)
     }
     if(this.nonInVehiclesIDs.length > 0) {
