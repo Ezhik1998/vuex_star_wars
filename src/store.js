@@ -15,6 +15,7 @@ const state = {
   characters: [],
   starships: [],
   planets: [],
+  vehicles: [],
 };
 const getters = {
   // // геттер как свойство
@@ -30,12 +31,15 @@ const getters = {
 
   getAllPlanetsIDs: state => state.planets.map(planet => planet.id),
 
+  getAllVehiclesIDs:state => state.vehicles.map(vehicle => vehicle.id),
+
 };
 const mutations = {
   setFilms: (state, payload) => (state.films = payload),
   setCharacters: (state, payload) => (state.characters = [...state.characters, ...payload]),
   setShips: (state, payload) => (state.starships = [...state.starships, ...payload]),
   setPlanets: (state, payload) => (state.planets = [...state.planets, ...payload]),
+  setVehicles: (state, payload) => (state.vehicles = [...state.vehicles, ...payload]),
   
 };
 const actions = {
@@ -95,6 +99,22 @@ const actions = {
     console.log(planetDetails);
     commit('setPlanets', planetDetails)    
   },
+
+  async getVehicles ({state, commit}, vehiclesID) {   
+    let vehicleDetails = [];    
+    for (let vehicle of vehiclesID) {
+      // console.log(planet);
+      const {data} = await axios.get("https://swapi.co/api/vehicles/" + vehicle + "/")
+      vehicleDetails.push(data) 
+      vehicleDetails.map(vh => {
+        let parse_url = vh.url.split('/');
+        vh.id = parse_url[parse_url.length - 2];
+      })         
+    }
+    console.log(vehicleDetails);
+    commit('setVehicles',vehicleDetails)    
+  },
+  
 };
 
 export default new Vuex.Store({

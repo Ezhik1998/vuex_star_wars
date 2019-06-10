@@ -22,9 +22,9 @@
               <planets-list :planetsInfo="planetsInfo"></planets-list>          
             </div>
 
-            <!-- <div class = "col" v-if ='film.vehicles && film.vehicles.length > 0' >
+            <div class = "col" v-if ='film.vehicles && film.vehicles.length > 0' >
               <vehicles-list :vehiclesInfo="vehiclesInfo"></vehicles-list>         
-            </div> -->
+            </div>
           </div>
         </div>
         
@@ -51,7 +51,7 @@ export default {
       speciesDetails: [], 
       // planetsInfo: [],
       // shipsInfo: [],
-      vehiclesInfo: [],
+      // vehiclesInfo: [],
 
   }), 
   components: {    
@@ -63,12 +63,13 @@ export default {
   },
 
   computed: {
-    ...mapState(['films', 'characters', 'starships', 'planets']),
+    ...mapState(['films', 'characters', 'starships', 'planets', 'vehicles']),
     ...mapGetters([
       'getFilmByID',
       'getAllCharactersIDs',
       'getAllShipsIDs',
       'getAllPlanetsIDs',
+      'getAllVehiclesIDs',
     ]),
 
     film() {
@@ -90,6 +91,12 @@ export default {
     planetsInfo() {
       return this.planets.filter(
         planet => this.film.planets.includes(planet.url)
+      )
+    },
+
+    vehiclesInfo() {
+      return this.vehicles.filter(
+        vehicle => this.film.vehicles.includes(vehicle.url)
       )
     },
 
@@ -141,6 +148,21 @@ export default {
         id => !this.getAllPlanetsIDs.includes(id)
       )
     },
+    currentFilmVehiclesIDs() {
+      return this.film.vehicles.map(
+        url => {
+          let parse_url = url.split('/');
+          let vehicle_id = parse_url[parse_url.length - 2]; 
+          return vehicle_id              
+        }
+      )
+    },
+    
+    nonInVehiclesIDs() {
+      return this.currentFilmVehiclesIDs.filter(
+        id => !this.getAllVehiclesIDs.includes(id)
+      )
+    },
 
   },
   
@@ -149,6 +171,7 @@ export default {
     this.$store.dispatch('getCharacters', this.nonInCharactersIDs)
     this.$store.dispatch('getShips', this.nonInShipsIDs)
     this.$store.dispatch('getPlanets', this.nonInPlanetsIDs)
+    this.$store.dispatch('getVehicles', this.nonInVehiclesIDs)
     
     // this.film.planets.forEach((planetUrl) => {
     //       fetch(planetUrl).then((response) => {
