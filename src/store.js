@@ -13,6 +13,7 @@ const state = {
 
   films: [],
   characters: [],
+  starships: [],
 };
 const getters = {
   // // геттер как свойство
@@ -20,16 +21,19 @@ const getters = {
   // // геттер как функция
   // getMarks: state => mark => state.marks.filter(m => m >= mark),
 
-  getFilmById: state => id => 
+  getFilmByID: state => id => 
     state.films.find(film => film.id === id),
 
   getAllCharactersIDs: state =>
-    state.characters.map(ch => ch.id)
+    state.characters.map(ch => ch.id),
+
+  getAllShipsIDs: state => state.starships.map(ship => ship.id)
 
 };
 const mutations = {
   setFilms: (state, payload) => (state.films = payload),
   setCharacters: (state, payload) => (state.characters = [...state.characters, ...payload]),
+  setShips: (state, payload) => (state.starships = [...state.starships, ...payload])
   
 };
 const actions = {
@@ -57,7 +61,25 @@ const actions = {
     }
     console.log(chDetails);
     commit('setCharacters', chDetails)    
-  }
+  },
+
+  async getShips ({state, commit}, shipsID) {   
+    let shipDetails = [];
+    console.log(shipsID);
+    for (let ship of shipsID) {
+      console.log(ship);
+      const {data} = await axios.get("https://swapi.co/api/starships/" + ship + "/")
+      shipDetails.push(data) 
+      shipDetails.map(sh => {
+        let parse_url = sh.url.split('/');
+        sh.id = parse_url[parse_url.length - 2];
+      })         
+    }
+    console.log(shipDetails);
+    commit('setShips', shipDetails)    
+  },
+
+
 };
 
 export default new Vuex.Store({

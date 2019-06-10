@@ -50,7 +50,7 @@ export default {
       // characterDetails: [], 
       speciesDetails: [], 
       planetsInfo: [],
-      shipsInfo: [],
+      // shipsInfo: [],
       vehiclesInfo: [],
 
   }), 
@@ -63,14 +63,15 @@ export default {
   },
 
   computed: {
-    ...mapState(['films', 'characters']),
+    ...mapState(['films', 'characters', 'starships']),
     ...mapGetters([
-      'getFilmById',
-      'getAllCharactersIDs'
+      'getFilmByID',
+      'getAllCharactersIDs',
+      'getAllShipsIDs',
     ]),
 
     film() {
-      return this.getFilmById(this.$route.params.id)
+      return this.getFilmByID(this.$route.params.id)
     },
 
     characterDetails() {
@@ -78,6 +79,13 @@ export default {
         ch => this.film.characters.includes(ch.url)
       )
     },
+
+    shipsInfo() {
+      return this.starships.filter(
+        ship => this.film.starships.includes(ship.url)
+      )
+    },
+
 
     currentFilmCharactersIDs() {
       return this.film.characters.map(
@@ -89,9 +97,25 @@ export default {
       )
     },
 
-    firstPresentCharactersIDs() {
+    nonInCharactersIDs() {
       return this.currentFilmCharactersIDs.filter(
         id => !this.getAllCharactersIDs.includes(id)
+      )
+    },
+
+    currentFilmShipsIDs() {
+      return this.film.starships.map(
+        url => {
+          let parse_url = url.split('/');
+          let ship_id = parse_url[parse_url.length - 2]; 
+          return ship_id              
+        }
+      )
+    },
+
+    nonInShipsIDs() {
+      return this.currentFilmShipsIDs.filter(
+        id => !this.getAllShipsIDs.includes(id)
       )
     }
 
@@ -113,46 +137,47 @@ export default {
     //       })
     //     }); 
 
-    this.$store.dispatch('getCharacters', this.firstPresentCharactersIDs)
+    this.$store.dispatch('getCharacters', this.nonInCharactersIDs)
+    this.$store.dispatch('getShips', this.nonInShipsIDs)
     
-    this.film.planets.forEach((planetUrl) => {
-          fetch(planetUrl).then((response) => {
-            return response.json();
-          }).then((detail) => {
-            let parse_url = detail.url.split('/');
-            detail.id = parse_url[parse_url.length - 2]; 
-            this.planetsInfo.push(detail);                       
-          })
-        }); 
+    // this.film.planets.forEach((planetUrl) => {
+    //       fetch(planetUrl).then((response) => {
+    //         return response.json();
+    //       }).then((detail) => {
+    //         let parse_url = detail.url.split('/');
+    //         detail.id = parse_url[parse_url.length - 2]; 
+    //         this.planetsInfo.push(detail);                       
+    //       })
+    //     }); 
 
-    this.film.vehicles.forEach((vehicleUrl) => {
-          fetch(vehicleUrl).then((response) => {
-            return response.json();
-          }).then((detail) => {
-            let parse_url = detail.url.split('/');
-            detail.id = parse_url[parse_url.length - 2]; 
-            this.vehiclesInfo.push(detail);                       
-          })
-        });
+    // this.film.vehicles.forEach((vehicleUrl) => {
+    //       fetch(vehicleUrl).then((response) => {
+    //         return response.json();
+    //       }).then((detail) => {
+    //         let parse_url = detail.url.split('/');
+    //         detail.id = parse_url[parse_url.length - 2]; 
+    //         this.vehiclesInfo.push(detail);                       
+    //       })
+    //     });
 
-    this.film.starships.forEach((shipUrl) => {
-              fetch(shipUrl).then((response) => {
-                return response.json();
-              }).then((detail) => {
-                let parse_url = detail.url.split('/');
-                detail.id = parse_url[parse_url.length - 2]; 
-                this.shipsInfo.push(detail);                       
-              })
-            });
-    this.film.species.forEach((speciesUrl) => {
-          fetch(speciesUrl).then((response) => {
-            return response.json();
-          }).then((detail) => {
-            let parse_url = detail.url.split('/');
-            detail.id = parse_url[parse_url.length - 2]; 
-            this.speciesDetails.push(detail);                       
-          })
-        }); 
+    // this.film.starships.forEach((shipUrl) => {
+    //           fetch(shipUrl).then((response) => {
+    //             return response.json();
+    //           }).then((detail) => {
+    //             let parse_url = detail.url.split('/');
+    //             detail.id = parse_url[parse_url.length - 2]; 
+    //             this.shipsInfo.push(detail);                       
+    //           })
+    //         });
+    // this.film.species.forEach((speciesUrl) => {
+    //       fetch(speciesUrl).then((response) => {
+    //         return response.json();
+    //       }).then((detail) => {
+    //         let parse_url = detail.url.split('/');
+    //         detail.id = parse_url[parse_url.length - 2]; 
+    //         this.speciesDetails.push(detail);                       
+    //       })
+    //     }); 
 
   }  
 }
