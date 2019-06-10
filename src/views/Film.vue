@@ -28,9 +28,9 @@
           </div>
         </div>
         
-        <!-- <div class="row">
+        <div class="row">
 	  	      <species-list :speciesInfo="speciesDetails"></species-list>
-	      </div> -->
+	      </div>
         <p/>
         <router-link class = "back" to="/">Back</router-link>
   </div>
@@ -48,7 +48,7 @@ export default {
   data: () => ({
       // film: {},      
       // characterDetails: [], 
-      speciesDetails: [], 
+      // speciesDetails: [], 
       // planetsInfo: [],
       // shipsInfo: [],
       // vehiclesInfo: [],
@@ -63,13 +63,14 @@ export default {
   },
 
   computed: {
-    ...mapState(['films', 'characters', 'starships', 'planets', 'vehicles']),
+    ...mapState(['films', 'characters', 'starships', 'planets', 'vehicles', 'species']),
     ...mapGetters([
       'getFilmByID',
       'getAllCharactersIDs',
       'getAllShipsIDs',
       'getAllPlanetsIDs',
       'getAllVehiclesIDs',
+      'getAllSpeciesIDs',
     ]),
 
     film() {
@@ -97,6 +98,12 @@ export default {
     vehiclesInfo() {
       return this.vehicles.filter(
         vehicle => this.film.vehicles.includes(vehicle.url)
+      )
+    },
+
+    speciesDetails() {
+      return this.species.filter(
+        sp => this.film.species.includes(sp.url)
       )
     },
 
@@ -164,6 +171,22 @@ export default {
       )
     },
 
+    currentFilmSpeciesIDs() {
+      return this.film.species.map(
+        url => {
+          let parse_url = url.split('/');
+          let species_id = parse_url[parse_url.length - 2]; 
+          return species_id              
+        }
+      )
+    },
+
+    nonInSpeciesIDs() {
+      return this.currentFilmSpeciesIDs.filter(
+        id => !this.getAllSpeciesIDs.includes(id)
+      )
+    },
+
   },
   
   async created() {
@@ -172,6 +195,7 @@ export default {
     this.$store.dispatch('getShips', this.nonInShipsIDs)
     this.$store.dispatch('getPlanets', this.nonInPlanetsIDs)
     this.$store.dispatch('getVehicles', this.nonInVehiclesIDs)
+    this.$store.dispatch('getSpecies', this.nonInSpeciesIDs)
     
     // this.film.planets.forEach((planetUrl) => {
     //       fetch(planetUrl).then((response) => {

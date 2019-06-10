@@ -16,6 +16,7 @@ const state = {
   starships: [],
   planets: [],
   vehicles: [],
+  species: [],
 };
 const getters = {
   // // геттер как свойство
@@ -33,6 +34,8 @@ const getters = {
 
   getAllVehiclesIDs:state => state.vehicles.map(vehicle => vehicle.id),
 
+  getAllSpeciesIDs: state => state.species.map(sp => sp.id),
+
 };
 const mutations = {
   setFilms: (state, payload) => (state.films = payload),
@@ -40,6 +43,7 @@ const mutations = {
   setShips: (state, payload) => (state.starships = [...state.starships, ...payload]),
   setPlanets: (state, payload) => (state.planets = [...state.planets, ...payload]),
   setVehicles: (state, payload) => (state.vehicles = [...state.vehicles, ...payload]),
+  setSpecies: (state, payload) => (state.species = [...state.species, ...payload]),
   
 };
 const actions = {
@@ -113,6 +117,21 @@ const actions = {
     }
     console.log(vehicleDetails);
     commit('setVehicles',vehicleDetails)    
+  },
+
+  async getSpecies ({state, commit}, speciesID) {   
+    let speciesDetails = [];    
+    for (let sp of speciesID) {
+      // console.log(planet);
+      const {data} = await axios.get("https://swapi.co/api/species/" + sp + "/")
+      speciesDetails.push(data) 
+      speciesDetails.map(spec => {
+        let parse_url = spec.url.split('/');
+        spec.id = parse_url[parse_url.length - 2];
+      })         
+    }
+    console.log(speciesDetails);
+    commit('setSpecies', speciesDetails)    
   },
   
 };
