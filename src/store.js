@@ -11,7 +11,8 @@ const state = {
   // marks: [10, 11, 9, 8, 12, 7, 8, 9, 12, 6, 7, 8],
   // mark: 9,
 
-  films: []
+  films: [],
+  characters: [],
 };
 const getters = {
   // // геттер как свойство
@@ -20,15 +21,15 @@ const getters = {
   // getMarks: state => mark => state.marks.filter(m => m >= mark),
 
   getFilmById: state => id => 
-    state.films.find(film => film.id === id)
+    state.films.find(film => film.id === id),
+
+  getAllCharactersIDs: state =>
+    state.characters.map(ch => ch.id)
 
 };
 const mutations = {
-  // incCounter: state => state.counter++,
-  // decCounter: state => state.counter--,
-  // setCounter: (state, payload) => (state.counter = payload),
-
   setFilms: (state, payload) => (state.films = payload),
+  setCharacters: (state, payload) => (state.characters = [...state.characters, ...payload]),
   
 };
 const actions = {
@@ -40,6 +41,22 @@ const actions = {
     });
     console.log(data.results);
     commit('setFilms', data.results) 
+  },
+
+  async getCharacters ({state, commit}, charactersID) {   
+    let chDetails = [];
+    console.log(charactersID);
+    for (let ch of charactersID) {
+      console.log(ch);
+      const {data} = await axios.get("https://swapi.co/api/people/" + ch + "/")
+      chDetails.push(data) 
+      chDetails.map(character => {
+        let parse_url = character.url.split('/');
+        character.id = parse_url[parse_url.length - 2];
+      })         
+    }
+    console.log(chDetails);
+    commit('setCharacters', chDetails)    
   }
 };
 
@@ -47,6 +64,5 @@ export default new Vuex.Store({
   state,
   getters,
   mutations,
-  actions,
-  
+  actions,  
 })

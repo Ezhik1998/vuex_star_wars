@@ -47,7 +47,7 @@ import PlanetsList from '@/components/PlanetsList';
 export default {
   data: () => ({
       // film: {},      
-      characterDetails: [], 
+      // characterDetails: [], 
       speciesDetails: [], 
       planetsInfo: [],
       shipsInfo: [],
@@ -63,13 +63,38 @@ export default {
   },
 
   computed: {
-    ...mapState(['films']),
+    ...mapState(['films', 'characters']),
     ...mapGetters([
       'getFilmById',
+      'getAllCharactersIDs'
     ]),
+
     film() {
       return this.getFilmById(this.$route.params.id)
+    },
+
+    characterDetails() {
+      return this.characters.filter(
+        ch => this.film.characters.includes(ch.url)
+      )
+    },
+
+    currentFilmCharactersIDs() {
+      return this.film.characters.map(
+        url => {
+          let parse_url = url.split('/');
+          let ch_id = parse_url[parse_url.length - 2]; 
+          return ch_id              
+        }
+      )
+    },
+
+    firstPresentCharactersIDs() {
+      return this.currentFilmCharactersIDs.filter(
+        id => !this.getAllCharactersIDs.includes(id)
+      )
     }
+
   },
   
   async created() {
@@ -78,15 +103,17 @@ export default {
     // this.film = data    
       
 
-    this.film.characters.forEach((characterUrl) => {
-          fetch(characterUrl).then((response) => {
-            return response.json();
-          }).then((detail) => {
-            let parse_url = detail.url.split('/');
-            detail.id = parse_url[parse_url.length - 2]; 
-            this.characterDetails.push(detail);                       
-          })
-        }); 
+    // this.film.characters.forEach((characterUrl) => {
+    //       fetch(characterUrl).then((response) => {
+    //         return response.json();
+    //       }).then((detail) => {
+    //         let parse_url = detail.url.split('/');
+    //         detail.id = parse_url[parse_url.length - 2]; 
+    //         this.characterDetails.push(detail);                       
+    //       })
+    //     }); 
+
+    this.$store.dispatch('getCharacters', this.firstPresentCharactersIDs)
     
     this.film.planets.forEach((planetUrl) => {
           fetch(planetUrl).then((response) => {
