@@ -36,12 +36,13 @@
 
 <script>
 import axios from 'axios';
+import { mapState, mapGetters} from 'vuex';
 import FilmsList from '@/components/FilmAppeared';
 import VehiclesList from '@/components/VehiclesList';
 import ShipsList from '@/components/StarshipsList'
 export default {
   data: () => ({      
-    character: [],  
+    // character: [],  
     filmsInfo: [],
     vehiclesInfo: [],
     shipsInfo: [],
@@ -53,10 +54,22 @@ export default {
     VehiclesList,
     ShipsList,     
   },
+
+  computed: {
+    ...mapState(['characters']),
+    ...mapGetters([
+      'getCharacterByID'
+    ]),
+
+    character(){
+      return this.getCharacterByID(this.$route.params.id)
+    },
+
+  },
   
   async created() {
-    const {data} = await axios.get('https://swapi.co/api/people/'+this.$route.params.id);
-    this.character = data 
+    // const {data} = await axios.get('https://swapi.co/api/people/'+this.$route.params.id);
+    // this.character = data 
 
     this.character.films.forEach((filmUrl) => {
           fetch(filmUrl).then((response) => {

@@ -38,6 +38,8 @@ const getters = {
 
   getSpeciesByID: state => id => state.species.find(sp => sp.id === id),
 
+  getCharacterByID: state => id => state.characters.find(ch => ch.id === id),
+
 };
 const mutations = {
   setFilms: (state, payload) => (state.films = payload),
