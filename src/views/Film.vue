@@ -190,12 +190,22 @@ export default {
   },
   
   async created() {
-    
-    this.$store.dispatch('getCharacters', this.nonInCharactersIDs)
-    this.$store.dispatch('getShips', this.nonInShipsIDs)
-    this.$store.dispatch('getPlanets', this.nonInPlanetsIDs)
-    this.$store.dispatch('getVehicles', this.nonInVehiclesIDs)
+
+    if(this.nonInCharactersIDs.length > 0) {    
+      this.$store.dispatch('getCharacters', this.nonInCharactersIDs)
+    }
+    if(this.nonInShipsIDs.length > 0) {  
+      this.$store.dispatch('getShips', this.nonInShipsIDs)
+    }
+    if(this.nonInPlanetsIDs.length > 0) { 
+      this.$store.dispatch('getPlanets', this.nonInPlanetsIDs)
+    }
+    if(this.nonInVehiclesIDs.length > 0) {
+      this.$store.dispatch('getVehicles', this.nonInVehiclesIDs)
+    }
+    if(this.nonInSpeciesIDs.length > 0) {
     this.$store.dispatch('getSpecies', this.nonInSpeciesIDs)
+    }
     
     // this.film.planets.forEach((planetUrl) => {
     //       fetch(planetUrl).then((response) => {
