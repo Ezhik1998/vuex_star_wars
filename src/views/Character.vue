@@ -47,7 +47,7 @@ export default {
     vehiclesInfo: [],
     shipsInfo: [],
     // homeInfo: [],
-    speciesInfo: [],      
+    // speciesInfo: [],      
   }), 
   components: {
     FilmsList,
@@ -56,10 +56,11 @@ export default {
   },
 
   computed: {
-    ...mapState(['characters', 'planets']),
+    ...mapState(['characters', 'planets', 'species']),
     ...mapGetters([
       'getCharacterByID',
-      'getAllPlanetsIDs'
+      'getAllPlanetsIDs',
+      'getAllSpeciesIDs',
     ]),
 
     character(){
@@ -67,45 +68,57 @@ export default {
     },
 
     homeInfo() {  
-      let hm = this.planets.filter(
-        planet => this.character.homeworld.includes(planet.url))
-      return hm[0].name;         
+      let pl = this.planets.filter(
+        planet => this.character.homeworld.includes(planet.url)
+      )
+      if (pl.length > 0) {
+        return pl[0].name
+      }       
+    },
+
+    speciesInfo() {
+      return this.species.filter(
+        sp => this.character.species.includes(sp.url)
+      )
     },
 
     currentCharacterPlanetsIDs() {
-      let plID = []
       let parse_url = this.character.homeworld.split('/');
       let planet_id = parse_url[parse_url.length - 2]; 
-      plID.push(planet_id)
-      return plID;
-      // return planet_id
-      // return this.character.homeworld.map(
-      //   url => {
-      //     let parse_url = url.split('/');
-      //     let planet_id = parse_url[parse_url.length - 2]; 
-      //     return planet_id              
-      //   }
-      // )
+      return planet_id;    
     },
 
     nonInPlanetsIDs() {
-      console.log("non in planets ids " + this.currentCharacterPlanetsIDs.filter(
-        id => !this.getAllPlanetsIDs.includes(id)
-      ));
-      return this.currentCharacterPlanetsIDs.filter(
-        id => !this.getAllPlanetsIDs.includes(id)
-      )      
+      return this.getAllPlanetsIDs.includes(this.currentCharacterPlanetsIDs) ? [] : [this.currentCharacterPlanetsIDs];
+    },
+
+    currentCharacterSpeciesIDs() {
+      return this.character.species.map(
+        url => {
+          let parse_url = url.split('/');
+          let species_id = parse_url[parse_url.length - 2]; 
+          return species_id              
+        }
+      )
+    },
+
+    nonInSpeciesIDs() {      
+      return this.currentCharacterSpeciesIDs.filter(
+        id => !this.getAllSpeciesIDs.includes(id)
+      )
     },
 
   },
   
   async created() {
-    // const {data} = await axios.get('https://swapi.co/api/people/'+this.$route.params.id);
-    // this.character = data 
 
     if(this.nonInPlanetsIDs.length > 0) {
       console.log("Non " + this.nonInPlanetsIDs); 
       this.$store.dispatch('getPlanets', this.nonInPlanetsIDs)
+    }
+
+    if(this.nonInSpeciesIDs.length > 0) {
+    this.$store.dispatch('getSpecies', this.nonInSpeciesIDs)
     }
 
     this.character.films.forEach((filmUrl) => {
@@ -119,15 +132,15 @@ export default {
         }); 
 
 
-    this.character.species.forEach((speciesUrl) => {
-          fetch(speciesUrl).then((response) => {
-            return response.json();
-          }).then((detail) => {
-            let parse_url = detail.url.split('/');
-            detail.id = parse_url[parse_url.length - 2]; 
-            this.speciesInfo.push(detail);                       
-          })
-        }); 
+    // this.character.species.forEach((speciesUrl) => {
+    //       fetch(speciesUrl).then((response) => {
+    //         return response.json();
+    //       }).then((detail) => {
+    //         let parse_url = detail.url.split('/');
+    //         detail.id = parse_url[parse_url.length - 2]; 
+    //         this.speciesInfo.push(detail);                       
+    //       })
+    //     }); 
         
 
     this.character.vehicles.forEach((vehicleUrl) => {

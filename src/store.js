@@ -40,6 +40,7 @@ const getters = {
 
   getCharacterByID: state => id => state.characters.find(ch => ch.id === id),
 
+  getPlanetByID: state => id => state.planets.find(pl => pl.id === id),
 };
 const mutations = {
   setFilms: (state, payload) => (state.films = payload),
@@ -97,7 +98,7 @@ const actions = {
     let planetDetails = [];    
     console.log("Planets ID " + planetsID);
     for (let planet of planetsID) {
-      // console.log(planet);
+      console.log(planet);
       const {data} = await axios.get("https://swapi.co/api/planets/" + planet + "/")
       planetDetails.push(data) 
       planetDetails.map(pl => {
@@ -105,6 +106,7 @@ const actions = {
         pl.id = parse_url[parse_url.length - 2];
       })         
     }
+    console.log("Planet details");
     console.log(planetDetails);
     commit('setPlanets', planetDetails)    
   },
