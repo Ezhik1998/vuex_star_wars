@@ -43,7 +43,7 @@ import ShipsList from '@/components/StarshipsList'
 export default {
   data: () => ({      
     // character: [],  
-    filmsInfo: [],
+    // filmsInfo: [],
     vehiclesInfo: [],
     shipsInfo: [],
     // homeInfo: [],
@@ -56,11 +56,12 @@ export default {
   },
 
   computed: {
-    ...mapState(['characters', 'planets', 'species']),
+    ...mapState(['characters', 'planets', 'species', 'films']),
     ...mapGetters([
       'getCharacterByID',
       'getAllPlanetsIDs',
       'getAllSpeciesIDs',
+      'getAllFilmsIDs'
     ]),
 
     character(){
@@ -79,6 +80,12 @@ export default {
     speciesInfo() {
       return this.species.filter(
         sp => this.character.species.includes(sp.url)
+      )
+    },
+
+    filmsInfo(){
+      return this.films.filter(
+        film => this.character.films.includes(film.url)
       )
     },
 
@@ -121,15 +128,19 @@ export default {
     this.$store.dispatch('getSpecies', this.nonInSpeciesIDs)
     }
 
-    this.character.films.forEach((filmUrl) => {
-          fetch(filmUrl).then((response) => {
-            return response.json();
-          }).then((detail) => {
-            let parse_url = detail.url.split('/');
-            detail.id = parse_url[parse_url.length - 2]; 
-            this.filmsInfo.push(detail);                       
-          })
-        }); 
+    // if(this.nonInSpeciesIDs.length > 0) {
+    //   this.$store.dispatch('getSpecies', this.nonInSpeciesIDs)
+    // }
+
+    // this.character.films.forEach((filmUrl) => {
+    //       fetch(filmUrl).then((response) => {
+    //         return response.json();
+    //       }).then((detail) => {
+    //         let parse_url = detail.url.split('/');
+    //         detail.id = parse_url[parse_url.length - 2]; 
+    //         this.filmsInfo.push(detail);                       
+    //       })
+    //     }); 
 
 
     // this.character.species.forEach((speciesUrl) => {
