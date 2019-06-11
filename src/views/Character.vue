@@ -44,7 +44,7 @@ export default {
   data: () => ({      
     // character: [],  
     // filmsInfo: [],
-    vehiclesInfo: [],
+    // vehiclesInfo: [],
     shipsInfo: [],
     // homeInfo: [],
     // speciesInfo: [],      
@@ -56,12 +56,12 @@ export default {
   },
 
   computed: {
-    ...mapState(['characters', 'planets', 'species', 'films']),
+    ...mapState(['characters', 'planets', 'species', 'films', 'vehicles']),
     ...mapGetters([
       'getCharacterByID',
       'getAllPlanetsIDs',
       'getAllSpeciesIDs',
-      'getAllFilmsIDs'
+      'getAllVehiclesIDs'
     ]),
 
     character(){
@@ -86,6 +86,12 @@ export default {
     filmsInfo(){
       return this.films.filter(
         film => this.character.films.includes(film.url)
+      )
+    },
+
+    vehiclesInfo() {
+      return this.vehicles.filter(
+        vehicle => this.character.vehicles.includes(vehicle.url)
       )
     },
 
@@ -115,6 +121,22 @@ export default {
       )
     },
 
+    currentCharacterVehiclesIDs() {
+      return this.character.vehicles.map(
+        url => {
+          let parse_url = url.split('/');
+          let vehicle_id = parse_url[parse_url.length - 2]; 
+          return vehicle_id              
+        }
+      )
+    },
+    
+    nonInVehiclesIDs() {
+      return this.currentCharacterVehiclesIDs.filter(
+        id => !this.getAllVehiclesIDs.includes(id)
+      )
+    },
+
   },
   
   async created() {
@@ -125,7 +147,11 @@ export default {
     }
 
     if(this.nonInSpeciesIDs.length > 0) {
-    this.$store.dispatch('getSpecies', this.nonInSpeciesIDs)
+      this.$store.dispatch('getSpecies', this.nonInSpeciesIDs)
+    }
+
+    if(this.nonInVehiclesIDs.length > 0) {
+      this.$store.dispatch('getVehicles', this.nonInVehiclesIDs)
     }
 
     // if(this.nonInSpeciesIDs.length > 0) {
@@ -154,15 +180,15 @@ export default {
     //     }); 
         
 
-    this.character.vehicles.forEach((vehicleUrl) => {
-          fetch(vehicleUrl).then((response) => {
-            return response.json();
-          }).then((detail) => {
-            let parse_url = detail.url.split('/');
-            detail.id = parse_url[parse_url.length - 2]; 
-            this.vehiclesInfo.push(detail);                       
-          })
-        }); 
+    // this.character.vehicles.forEach((vehicleUrl) => {
+    //       fetch(vehicleUrl).then((response) => {
+    //         return response.json();
+    //       }).then((detail) => {
+    //         let parse_url = detail.url.split('/');
+    //         detail.id = parse_url[parse_url.length - 2]; 
+    //         this.vehiclesInfo.push(detail);                       
+    //       })
+    //     }); 
 
     this.character.starships.forEach((shipUrl) => {
           fetch(shipUrl).then((response) => {

@@ -40,7 +40,7 @@ const getters = {
 
   getCharacterByID: state => id => state.characters.find(ch => ch.id === id),
 
-  getPlanetByID: state => id => state.planets.find(pl => pl.id === id),
+  // getPlanetByID: state => id => state.planets.find(pl => pl.id === id),
 };
 const mutations = {
   setFilms: (state, payload) => (state.films = payload),
