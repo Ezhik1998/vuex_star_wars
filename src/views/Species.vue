@@ -20,10 +20,6 @@ import axios from 'axios';
 import { mapState, mapGetters } from 'vuex';
 
 export default {
-    // data: () => ({
-    //   species: [],       
-    // }),
-
     computed: {
         ...mapState(['species']),
         ...mapGetters([
@@ -33,12 +29,7 @@ export default {
         species() {
             return this.getSpeciesByID(this.$route.params.id)
         }
-    },
-
-    // async created() {
-    // var {data} = await axios.get('https://swapi.co/api/species/'+this.$route.params.id);
-    // this.species = data 
-    // }    
+    },   
 }
 </script>
 

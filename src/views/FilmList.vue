@@ -11,25 +11,14 @@
 import axios from 'axios';
 import { mapState } from 'vuex';
 export default {
-  // data: () => ({
-  //   films:[]
-  // }),
   computed: {
     ...mapState(['films'])
   },
   
   async created() {
-    // const {data} = await axios.get("https://swapi.co/api/films/");
-    // this.films = data.results.map(film => {
-    //   let parse_url = film.url.split('/');
-    //   film.id = parse_url[parse_url.length - 2];
-      
-    //   return film;
-    // });
     if (this.films.length !== 0) return;
     this.$store.dispatch('getFilms')
-  }
-  
+  }  
 }
 </script>
 

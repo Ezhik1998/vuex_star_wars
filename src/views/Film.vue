@@ -44,16 +44,7 @@ import SpeciesList from '@/components/SpeciesList';
 import ShipsList from '@/components/StarshipsList';
 import VehiclesList from '@/components/VehiclesList';
 import PlanetsList from '@/components/PlanetsList';
-export default {
-  data: () => ({
-      // film: {},      
-      // characterDetails: [], 
-      // speciesDetails: [], 
-      // planetsInfo: [],
-      // shipsInfo: [],
-      // vehiclesInfo: [],
-
-  }), 
+export default { 
   components: {    
       CharacterList, 
       SpeciesList, 
@@ -151,7 +142,6 @@ export default {
     },
 
     nonInPlanetsIDs() {
-      // console.log("Curr pl " + this.currentFilmPlanetsIDs);
       return this.currentFilmPlanetsIDs.filter(
         id => !this.getAllPlanetsIDs.includes(id)
       )
@@ -191,7 +181,6 @@ export default {
   },
   
   async created() {
-
     if(this.nonInCharactersIDs.length > 0) {    
       this.$store.dispatch('getCharacters', this.nonInCharactersIDs)
     }
@@ -208,7 +197,6 @@ export default {
     if(this.nonInSpeciesIDs.length > 0) {
     this.$store.dispatch('getSpecies', this.nonInSpeciesIDs)
     }
-
   }  
 }
 </script>
